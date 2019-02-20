@@ -9,27 +9,29 @@ defmodule Rockpaperscissors.Channel do
     GenServer.start_link(__MODULE__, :ok, opts)
   end
 
-  def lookup(server, name) do
-    GenServer.call(server, {:lookup, name})
+  def lookup(server, channel) do
+    GenServer.call(server, {:lookup, channel})
   end
 
-  def create(server, name) do
-    GenServer.cast(server, {:create, name})
+  def create(server, channel) do
+    GenServer.cast(server, {:create, channel})
   end
 
-  def vote(server, name, user = %User{}) do
-    {:ok, bucket} = lookup(server, name)
+  def vote(server, channel, user = %User{}) do
+    {:ok, bucket} = lookup(server, channel)
     Vote.put(bucket, user.id, user)
   end
 
-  def get_vote(server, name, user = %User{}) do
-    {:ok, bucket} = lookup(server, name)
+  def get_vote(server, channel, user = %User{}) do
+    {:ok, bucket} = lookup(server, channel)
     Vote.get_vote(bucket, user.id)
   end
 
-  def count(server, name) do
-    {:ok, bucket} = lookup(server, name)
-    Vote.count(bucket)
+  def count(server, channel) do
+    case lookup(server, channel) do
+      {:ok, bucket} -> Vote.count(bucket)
+      _ -> :error
+    end
   end
 
   ## Server callbacks
@@ -37,16 +39,16 @@ defmodule Rockpaperscissors.Channel do
     {:ok, %{}}
   end
 
-  def handle_call({:lookup, name}, _from, names) do
-    {:reply, Map.fetch(names, name), names}
+  def handle_call({:lookup, channel}, _from, channels) do
+    {:reply, Map.fetch(channels, channel), channels}
   end
 
-  def handle_cast({:create, name}, names) do
-    if Map.has_key?(names, name) do
-      {:noreply, names}
+  def handle_cast({:create, channel}, channels) do
+    if Map.has_key?(channels, channel) do
+      {:noreply, channels}
     else
       {:ok, bucket} = Rockpaperscissors.Vote.start_link([])
-      {:noreply, Map.put(names, name, bucket)}
+      {:noreply, Map.put(channels, channel, bucket)}
     end
   end
 end

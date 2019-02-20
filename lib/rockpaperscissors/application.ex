@@ -9,7 +9,8 @@ defmodule Rockpaperscissors.Application do
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      RockpaperscissorsWeb.Endpoint
+      RockpaperscissorsWeb.Endpoint,
+      {Rockpaperscissors.Channel, name: Rockpaperscissors.Channel}
       # Starts a worker by calling: Rockpaperscissors.Worker.start_link(arg)
       # {Rockpaperscissors.Worker, arg},
     ]

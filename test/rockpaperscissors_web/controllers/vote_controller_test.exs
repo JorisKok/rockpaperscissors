@@ -12,5 +12,27 @@ defmodule RockpaperscissorsWeb.VoteControllerTest do
                        "success" => true
                      }
     end
+
+    test "We can count the voting results for a channel name", %{conn: conn} do
+      post conn, "/v1/vote", %{channel: "test"}
+
+      conn = get conn, "/v1/vote/test/count"
+
+      assert_value json_response(conn, 200) == %{
+                     "data" => %{
+                       "channel" => "test",
+                       "count" => %{"paper" => 0, "rock" => 0, "scissors" => 0}
+                     },
+                     "message" => "Counted the votes",
+                     "success" => true
+                   }
+    end
+
+    test "We return a 404 when a channel is not found", %{conn: conn} do
+      conn = get conn, "/v1/vote/test/count"
+
+      assert_value json_response(conn, 404) == %{"errors" => %{"detail" => "Not found"}}
+    end
+
   end
 end

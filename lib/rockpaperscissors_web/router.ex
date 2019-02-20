@@ -9,5 +9,6 @@ defmodule RockpaperscissorsWeb.Router do
     pipe_through :api
 
     post "/vote", VoteController, :init
+    get "/vote/:channel/count", VoteController, :count
   end
 end

@@ -23,13 +23,12 @@ defmodule Rockpaperscissors.ChannelTest do
         display_name: "user X",
         vote: "paper"
       }
-      Rockpaperscissors.Channel.vote(registry, "awesome-user-channel", user) == :ok
+      Rockpaperscissors.Channel.vote(registry, "awesome-user-channel", user)
 
       assert_value Rockpaperscissors.Channel.get_vote(registry, "awesome-user-channel", user) ==
                      "paper"
     end
 
-    @tag :current
     test "We can count all votes", %{registry: registry} do
       Rockpaperscissors.Channel.create(registry, "awesome-user-channel")
 
@@ -39,7 +38,7 @@ defmodule Rockpaperscissors.ChannelTest do
         display_name: "user P",
         vote: "paper"
       }
-      Rockpaperscissors.Channel.vote(registry, "awesome-user-channel", user) == :ok
+      Rockpaperscissors.Channel.vote(registry, "awesome-user-channel", user)
 
       user = %User{
         id: "9f4fa4c5-32f4-4555-ad81-91c4d09025d2",
@@ -47,7 +46,7 @@ defmodule Rockpaperscissors.ChannelTest do
         display_name: "user R",
         vote: "rock"
       }
-      Rockpaperscissors.Channel.vote(registry, "awesome-user-channel", user) == :ok
+      Rockpaperscissors.Channel.vote(registry, "awesome-user-channel", user)
 
       user = %User{
         id: "9f4fa666-32f4-4555-ad81-91c4d09025d2",
@@ -55,7 +54,7 @@ defmodule Rockpaperscissors.ChannelTest do
         display_name: "user RR",
         vote: "rock"
       }
-      Rockpaperscissors.Channel.vote(registry, "awesome-user-channel", user) == :ok
+      Rockpaperscissors.Channel.vote(registry, "awesome-user-channel", user)
 
       user = %User{
         id: "9111a666-sssS-4555-ad81-91c4d09025d2",
@@ -63,7 +62,7 @@ defmodule Rockpaperscissors.ChannelTest do
         display_name: "user S",
         vote: "scissors"
       }
-      Rockpaperscissors.Channel.vote(registry, "awesome-user-channel", user) == :ok
+      Rockpaperscissors.Channel.vote(registry, "awesome-user-channel", user)
 
       assert_value Rockpaperscissors.Channel.count(registry, "awesome-user-channel") == %{
                      "paper" => 1,
